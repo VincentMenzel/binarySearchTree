@@ -1,8 +1,5 @@
-interface IBSTNode {
-  value: number;
-  right: BSTNode | null;
-  left: BSTNode | null;
-}
+import {IBSTNode} from "./index";
+import util = require('util');
 
 class BSTNode {
 
@@ -10,7 +7,7 @@ class BSTNode {
   public right: IBSTNode;
   public left: IBSTNode;
 
-  constructor(value) {
+  constructor(value: number) {
     this.value = value;
     this.left = null;
     this.right = null;
@@ -18,19 +15,19 @@ class BSTNode {
 }
 
 class BST {
-  public rootNode: BSTNode
+  private readonly rootNode: BSTNode
   private nodeCount: number = 1;
 
-  constructor(value) {
+  constructor(value: number) {
     this.rootNode = new BSTNode(value)
   }
 
-  size () {
+  public size (): number {
     console.log(`BTS size: ${this.nodeCount}`)
     return this.nodeCount;
   }
 
-  min () {
+  public min (): number {
     let currentNode = this.rootNode;
 
     while (currentNode.left) {
@@ -41,7 +38,7 @@ class BST {
     return currentNode.value;
   }
 
-  max () {
+  public max (): number {
     let currentNode = this.rootNode;
 
     while (currentNode.right) {
@@ -52,14 +49,20 @@ class BST {
     return currentNode.value;
   }
 
-  contains (value: Number) {
+  public contains (value: number): boolean {
     let currentNode = this.rootNode;
+
     while (value !== currentNode.value) {
+
       if (value < currentNode.value && currentNode.left) {
         currentNode = currentNode.left
-      } else if (value > currentNode.value && currentNode.right) {
+      }
+
+      else if (value > currentNode.value && currentNode.right) {
         currentNode = currentNode.right
-      } else {
+      }
+
+      else {
         break;
       }
     }
@@ -69,7 +72,7 @@ class BST {
     return doesContain;
   }
 
-  insert (newValue: Number){
+  public insert (newValue: number): true {
     const newNode = new BSTNode(newValue);
     const parentNode = this.findClosestNode(newValue)
     let alreadyExists = false;
@@ -77,10 +80,14 @@ class BST {
     if (parentNode.value > newValue) {
       parentNode.left = newNode;
       this.nodeCount++;
-    } else if (parentNode.value < newValue) {
+    }
+
+    else if (parentNode.value < newValue) {
       parentNode.right = newNode;
       this.nodeCount++;
-    } else {
+    }
+
+    else {
       alreadyExists = true;
     }
 
@@ -90,8 +97,8 @@ class BST {
     return true;
   }
 
-  private findClosestNode (value) {
-    const searchNode = (node) => {
+  private findClosestNode (value: number): BSTNode {
+    const searchNode = (node: BSTNode): BSTNode => {
       if (node.value > value) {
 
         if (node.left) {
@@ -107,6 +114,7 @@ class BST {
         } else {
           return node;
         }
+
       } else {
         return node;
       }
@@ -115,6 +123,9 @@ class BST {
     return searchNode(this.rootNode);
   }
 
+  drawTree(): void {
+    console.log(util.inspect(bts, false, null, true))
+  }
 }
 
 /**
@@ -150,3 +161,5 @@ bts.insert(8);
 bts.size();
 bts.min();
 bts.max();
+
+bts.drawTree();
